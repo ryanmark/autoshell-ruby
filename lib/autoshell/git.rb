@@ -1,6 +1,6 @@
 require 'fileutils'
 
-module WorkDir
+module Autoshell
   # Repo
   module Git
     # Has this repo been cloned to disk?

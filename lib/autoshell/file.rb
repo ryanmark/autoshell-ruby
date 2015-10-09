@@ -2,7 +2,7 @@ require 'fileutils'
 require 'mime/types'
 require 'json'
 
-module WorkDir
+module Autoshell
   module File
     # Get the path for or chdir into this repo
     def working_dir(&block)

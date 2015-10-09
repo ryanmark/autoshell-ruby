@@ -1,4 +1,4 @@
-module WorkDir
+module Autoshell
   module Environment
     # Is this a ruby project?
     def ruby?
