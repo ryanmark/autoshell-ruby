@@ -126,6 +126,7 @@ module Autoshell
     # @return [String] contents of file at path
     def read(path)
       m = mime(path)
+      return read_text(path) unless m
       return read_json(path) if m.content_type == 'application/json'
       return read_binary(path) if m.binary?
       read_text(path)

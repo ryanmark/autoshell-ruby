@@ -4,7 +4,9 @@ class TestFilestuff < Minitest::Test
   include Autoshell::TestHelper
 
   def test_expand
-    skip
+    d = autoshell :empty
+
+    assert_equal File.join(d.to_s, 'foo'), d.expand('foo')
   end
 
   def test_exist
@@ -35,10 +37,6 @@ class TestFilestuff < Minitest::Test
     skip
   end
 
-  def test_cp
-    skip
-  end
-
   def test_mv
     skip
   end
@@ -52,7 +50,30 @@ class TestFilestuff < Minitest::Test
   end
 
   def test_copy_to
-    skip
+    r = autoshell :repo
+    d = autoshell :destination
+
+    r.clone REPO_URL
+    r.setup_environment
+
+    # create a snapshot!
+    r.copy_to d.working_dir
+
+    # now should have stuff
+    assert d.ruby?, 'Should have ruby'
+    refute d.python?, "Shouldn't have python"
+    refute d.node?, "Shouldn't have node"
+    assert d.git?, 'Should have git'
+    assert d.exist?, 'Should exist'
+    assert d.dir?, 'Should be a dir'
+    assert d.environment?, 'Should have environment'
+
+    assert r.exist?('autotune-build'), 'Should have build script'
+
+    # make sure we can't copy a snapshot twice
+    assert_raises Autoshell::CommandError do
+      r.copy_to d.working_dir
+    end
   end
 
   def test_mime
@@ -60,7 +81,20 @@ class TestFilestuff < Minitest::Test
   end
 
   def test_read
-    skip
+    d = autoshell :ruby
+
+    # what happens if i add random crap and switch?
+    open(d.expand('foo.bar'), 'w') do |fp|
+      fp.write 'baz!!!!'
+    end
+    assert d.exist?('foo.bar'), 'Should have random crap'
+
+    assert 'baz!!!!', d.read('foo.bar')
+
+    open(d.expand('testfile'), 'w') do |fp|
+      fp.write 'baz!!!!'
+    end
+    assert 'baz!!!!', d.read('testfile')
   end
 
   def test_cd
