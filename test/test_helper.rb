@@ -1,6 +1,5 @@
 $LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
 require 'autoshell'
+require 'autoshell/test_helper'
 
 require 'minitest/autorun'
-
-REPO_URL = 'https://github.com/voxmedia/autotune-example-blueprint.git'

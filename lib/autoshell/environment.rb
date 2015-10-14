@@ -27,27 +27,25 @@ module Autoshell
 
     # Setup a ruby environment
     def setup_ruby_environment
-      return false unless ruby?
-      working_dir do
-        run 'bundle', 'install', '--path', '.bundle', '--deployment'
-      end
+      return unless ruby?
+      cd { run 'bundle', 'install', '--path', '.bundle', '--deployment' }
     end
 
     # Setup a python environment
     def setup_python_environment
-      return false unless python?
-      working_dir do
-        run 'virtualenv', '.virtualenv'
-        run './.virtualenv/bin/pip', '-r', 'requirements.txt'
+      return unless python?
+      cd do
+        [
+          run('virtualenv', '.virtualenv'),
+          run('./.virtualenv/bin/pip', '-r', 'requirements.txt')
+        ].join("\n")
       end
     end
 
     # Setup a node environment
     def setup_node_environment
-      return false unless node?
-      working_dir do
-        run 'npm', 'install'
-      end
+      return unless node?
+      cd { run 'npm', 'install' }
     end
   end
 end

@@ -1,0 +1,13 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    noop (0.0.2)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  noop
+
+BUNDLED WITH
+   1.10.6
