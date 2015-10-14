@@ -8,11 +8,23 @@ class TestFilestuff < Minitest::Test
   end
 
   def test_exist
-    skip
+    d = autoshell :empty
+    refute d.exist?
+    assert d.exist? '/bin'
+
+    d = autoshell :ruby
+    assert d.exist?
+    assert d.exist? 'Gemfile'
   end
 
   def test_dir
-    skip
+    d = autoshell :empty
+    refute d.dir?
+    assert d.dir? '/bin'
+
+    d = autoshell :ruby
+    assert d.dir?
+    refute d.dir? 'Gemfile'
   end
 
   def test_glob
@@ -28,10 +40,6 @@ class TestFilestuff < Minitest::Test
   end
 
   def test_mv
-    skip
-  end
-
-  def test_cd
     skip
   end
 
