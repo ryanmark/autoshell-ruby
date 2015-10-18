@@ -94,7 +94,14 @@ module Autoshell
     # Make all the parent directories for a path
     # @param path [String] local dir path to create
     def mkpdir(path = '.')
-      FileUtils.mkdir_p(File.dirname(expand path))
+      mkdir(File.dirname(expand path))
+      self
+    end
+
+    # Make all the directories for a path
+    # @param path [String] local dir path to create
+    def mkdir(path = '.')
+      FileUtils.mkdir_p(expand path)
       self
     end
 
@@ -128,6 +135,7 @@ module Autoshell
       m = mime(path)
       return read_text(path) unless m
       return read_json(path) if m.content_type == 'application/json'
+      return read_yaml(path) if m.content_type == 'text/x-yaml'
       return read_binary(path) if m.binary?
       read_text(path)
     end
@@ -140,6 +148,18 @@ module Autoshell
       return nil if text.nil?
       JSON.parse(text)
     rescue JSON::ParserError
+      nil
+    end
+
+    # Read and parse YAML from a local path
+    # @param path [String] local path of the file to read
+    # @return contents of YAML
+    def read_yaml(path)
+      require 'yaml'
+      text = read_text(path)
+      return nil if text.nil?
+      YAML.parse(text).to_h
+    rescue Psych::SyntaxError
       nil
     end
 

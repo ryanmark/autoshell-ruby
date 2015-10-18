@@ -20,7 +20,7 @@ module Autoshell
   class CommandError < StandardError; end
 
   class << self
-    def new(path, env = {})
+    def new(path = '.', env = {})
       Base.new(path, env)
     end
     alias_method :open, :new
