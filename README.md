@@ -1,15 +1,13 @@
 # Autoshell
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/autoshell`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
+Simple wrapper for shell commands, used by [Autotune](https://github.com/voxmedia/autotune).
 
 ## Installation
 
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'autoshell', :github => 'ryanmark/autoshell'
+gem 'autoshell', :github => 'ryanmark/autoshell-ruby'
 ```
 
 And then execute:
@@ -18,7 +16,15 @@ And then execute:
 
 ## Usage
 
-TODO: Write usage instructions here
+Create a new autoshell object with optional path and environment hash.
+
+```ruby
+env = { 'FOO' => 'bar' }
+sh = Autoshell.new('~/code/autoshell', env)
+sh.clone('https://github.com/ryanmark/autoshell-ruby.git')
+sh.setup_environment
+sh.cd { sh.run('bundle', 'exec', 'rake', 'test') }
+```
 
 ## Development
 
