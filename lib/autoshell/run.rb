@@ -3,11 +3,10 @@ require 'open3'
 
 module Autoshell
   # Execution stuff
-  # @!attribute branch
-  #   @return [Hash] (master) branch of the current repo
   module Run
     # Wrapper around Open3.capture2e
-    # @param (see Open3#capture2e)
+    #
+    # @see Open3#capture2e
     # @return [String] command output
     # @raise [CommandError] if the command fails
     def run(*args, **opts)
@@ -32,6 +31,11 @@ module Autoshell
       end
     end
 
+    # Check if a command is available
+    #
+    # @param cmd [String] Name of the command
+    # @return [String] Path to the command
+    # @return [False] If command does not exist
     def command?(cmd)
       run('which', cmd.to_s)
     rescue CommandError
@@ -42,7 +46,8 @@ module Autoshell
 
     # Render a prompt string for logging
     #
-    # @param cmd [Array] array of command parts
+    # @private
+    # @param cmd [Array<String>] array of command parts
     # @return [String] ansi formatted string
     def prompt_ansi(cmd)
       "#{ANSI.blue(working_dir)} $ #{ANSI.white(cmd.join(' '))}"
@@ -50,7 +55,8 @@ module Autoshell
 
     # Render a prompt string for logging
     #
-    # @param cmd [Array] array of command parts
+    # @private
+    # @param cmd [Array<String>] array of command parts
     # @return [String] plain text string
     def prompt_text(cmd)
       ANSI.unansi(prompt_ansi(cmd))

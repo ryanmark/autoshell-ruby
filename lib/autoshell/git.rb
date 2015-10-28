@@ -3,7 +3,7 @@ require 'fileutils'
 module Autoshell
   # Git repo stuff
   # @!attribute branch
-  #   @return [Hash] (master) branch of the current repo
+  #   @return [String] (master) branch of the current repo
   module Git
     def branch
       @branch ||= git? ? git('rev-parse', '--abbrev-ref', 'HEAD') : 'master'

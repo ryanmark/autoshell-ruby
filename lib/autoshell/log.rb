@@ -1,10 +1,10 @@
 require 'logger'
 require 'stringio'
+require 'ansi/code'
 
 module Autoshell
+  # Mixin for handling log stuff
   module Log
-    attr_accessor :color
-
     # Instance-specific logger
     #
     #   shell = Autoshell.new '~/test'
@@ -16,7 +16,6 @@ module Autoshell
     def logger
       return @logger if @logger
 
-      @color = true
       @log_device = StringIO.new
       @logger = Logger.new(@log_device)
       @logger.level = LOG_LEVEL
@@ -27,12 +26,12 @@ module Autoshell
 
     # Get the complete output of the log
     # @return [String] log contents
-    def log_output
+    def log_output(color: false)
       return unless @log_device
       if color
         @log_device.string
       else
-        strip_ansi(@log_device.string)
+        ANSI.unansi(@log_device.string)
       end
     end
 
