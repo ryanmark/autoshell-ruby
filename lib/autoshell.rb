@@ -20,8 +20,8 @@ module Autoshell
   class CommandError < StandardError; end
 
   class << self
-    def new(path = '.', env = {})
-      Base.new(path, env)
+    def new(path = '.', env: {}, logger: nil)
+      Base.new(path, env: env, logger: logger)
     end
     alias_method :open, :new
   end
@@ -53,9 +53,9 @@ module Autoshell
       # Load whitelisted environment variables
       self.env = ENV.select { |k, _| ALLOWED_ENV.include? k }
       # Set some defaults
-      env['SHELL'] = '/bin/bash'
+      self.env['SHELL'] = '/bin/bash'
       # Update environment variables from option
-      env.update env
+      self.env.update env
       # did we get a logger to use?
       self.logger = logger if logger
     end
