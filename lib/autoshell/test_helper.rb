@@ -4,7 +4,8 @@ require 'fileutils'
 module Autoshell
   # Helper test class
   module TestHelper
-    REPO_URL = 'https://github.com/voxmedia/autotune-example-blueprint.git'
+    REPO_URL = File.expand_path(
+      '../../../test/fixtures/autotune-example-blueprint.git', __FILE__)
     FIXTURES_PATH = File.expand_path('../../../test/fixtures', __FILE__)
 
     def before_setup
