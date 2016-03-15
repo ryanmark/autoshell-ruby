@@ -23,7 +23,7 @@ env = { 'FOO' => 'bar' }
 sh = Autoshell.new('~/code/autoshell', env)
 sh.clone('https://github.com/ryanmark/autoshell-ruby.git')
 sh.setup_environment
-sh.cd { sh.run('bundle', 'exec', 'rake', 'test') }
+sh.cd |s| { s.run('bundle', 'exec', 'rake', 'test') }
 ```
 
 ## Development
@@ -34,7 +34,7 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/autoshell. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](contributor-covenant.org) code of conduct.
+Bug reports and pull requests are welcome on GitHub at https://github.com/ryanmark/autoshell. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](contributor-covenant.org) code of conduct.
 
 
 ## License
