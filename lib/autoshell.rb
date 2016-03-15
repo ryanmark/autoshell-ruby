@@ -6,20 +6,33 @@ require 'autoshell/filestuff'
 require 'autoshell/git'
 require 'autoshell/log'
 
-# Thin API for doing shell stuff
+# The top-level namespace of the Autoshell lib
+#
+#
 module Autoshell
-  # These vars are allowed to leak through to commands run in the working dir
-  ALLOWED_ENV = %w(
-    PATH LANG USER LOGNAME LC_CTYPE LD_LIBRARY_PATH ARCHFLAGS TMPDIR
-    SSH_AUTH_SOCK HOME)
+  # These vars are copied from the ruby script's environment
+  ALLOWED_ENV = %w(PATH LANG USER LOGNAME LC_CTYPE LD_LIBRARY_PATH ARCHFLAGS
+                   TMPDIR SSH_AUTH_SOCK HOME)
 
+  # Default log formatter
   LOG_FORMATTER = proc { |_s, _d, _p, msg| msg }
-  # LOG_LEVEL = Logger::WARN
-  LOG_LEVEL = Logger::DEBUG
 
+  # Default log level
+  LOG_LEVEL = Logger::DEBUG # WARN
+
+  # Exception thrown by autoshell methods when a command fails
+  #
+  #   sh = Autoshell.new
+  #   begin
+  #     sh.run 'missing-command'
+  #   rescue Autoshell::CommandError => exc
+  #     puts 'command failed!'
+  #   end
   class CommandError < StandardError; end
 
   class << self
+    # Create a new autoshell. Same as `Autoshell::Base.new`.
+    # @see Autoshell::Base#initialize
     def new(path = '.', env: {}, logger: nil)
       Base.new(path, env: env, logger: logger)
     end
@@ -44,6 +57,7 @@ module Autoshell
     alias_method :to_s, :working_dir
 
     # Create a new shell object with a working directory and environment vars
+    #
     # @param path [String] Create a new shell at this path
     # @option env [Hash] :env Environment variables to add to this shell
     # @option logger [Logger] :logger Logger instance to use
