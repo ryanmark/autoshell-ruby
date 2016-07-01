@@ -20,7 +20,7 @@ Create a new autoshell object with optional path and environment hash.
 
 ```ruby
 env = { 'FOO' => 'bar' }
-sh = Autoshell.new('~/code/autoshell', env)
+sh = Autoshell.new('~/code/autoshell', env: env)
 sh.clone('https://github.com/ryanmark/autoshell-ruby.git')
 sh.setup_environment
 sh.cd |s| { s.run('bundle', 'exec', 'rake', 'test') }
