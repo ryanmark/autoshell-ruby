@@ -6,9 +6,26 @@ module Autoshell
   #   @return [String] (master) branch of the current repo
   module Git
     def branch
-      @branch ||= git? ? git('rev-parse', '--abbrev-ref', 'HEAD') : 'master'
+      @branch ||= 'master'
     end
     attr_writer :branch
+
+    # Set the branch from a repo url
+    #
+    # @param [String] Git repository URL
+    # @return [string] Branch name
+    def branch_from_repo_url(repo_url)
+      if repo_url =~ /#\S+[^\/]/
+        @branch = repo_url.split('#')[1]
+      else
+        @branch = 'master'
+      end
+    end
+
+    def commit_hash_for_checkout
+      @commit_hash_for_checkout ||= 'HEAD'
+    end
+    attr_writer :commit_hash_for_checkout
 
     # Has this repo been cloned to disk?
     #
@@ -22,13 +39,14 @@ module Autoshell
     # @return [String] Output of git commands
     def update
       [
-        git('checkout', working_dir),
-        git('clean', '-fd'),
-        git('checkout', 'master'),
+        git('checkout', '.'),
+        git('clean', '-ffd'),
+        git('checkout', branch),
         git('pull', '--recurse-submodules=yes'),
         git('fetch', 'origin'),
-        git('checkout', branch),
-        git('submodule', 'update', '--init')
+        git('checkout', commit_hash_for_checkout),
+        git('submodule', 'update', '--init'),
+        git('clean', '-ffd')
       ].join("\n")
     end
 
@@ -47,7 +65,17 @@ module Autoshell
     # @return [String] Output of git commands
     def clone(repo_url)
       mkpdir working_dir
-      run 'git', 'clone', '--recursive', repo_url, working_dir
+      run 'git', 'clone', '--recursive', repo_url.split('#')[0], working_dir
+      branch_from_repo_url(repo_url)
+      update
+    end
+
+    # Checkout a specific hash on the repo
+    #
+    # @param [String] Git version hash
+    # @return [String] Output of git commands
+    def checkout_version(version_hash)
+      git 'checkout', version_hash || 'HEAD'
     end
 
     # Get the current commit hash

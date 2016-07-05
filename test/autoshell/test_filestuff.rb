@@ -42,7 +42,13 @@ class TestFilestuff < Minitest::Test
   end
 
   def test_mkpdir
-    skip
+    r = autoshell :repo
+    r.mkpdir
+
+    assert File.exist?(File.dirname(r.working_dir)),
+           'Parent dir should exist'
+    refute r.exist?,
+           'Child dir should not exist'
   end
 
   def test_move_to
@@ -52,6 +58,11 @@ class TestFilestuff < Minitest::Test
   def test_copy_to
     r = autoshell :repo
     d = autoshell :destination
+
+    # Make sure we can't copy a nonexistant dir
+    assert_raises Autoshell::CommandError do
+      r.copy_to d.working_dir
+    end
 
     r.clone REPO_URL
     r.setup_environment

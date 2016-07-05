@@ -115,9 +115,15 @@ module Autoshell
 
     # Copy this working dir to another path
     # @param path [String] destination path to copy to
-    def copy_to(path = nil)
+    def copy_to(path = nil, force: nil)
       return super if path.nil?
-      cp '.', path
+
+      unless Dir.exist? working_dir
+        raise CommandError,
+              "copy_to: The directory '#{working_dir}' does not exist"
+      end
+
+      cp '.', path, force: force
       self.class.new(expand path)
     end
 
