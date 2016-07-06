@@ -68,6 +68,17 @@ module Autoshell
       self.env = ENV.select { |k, _| ALLOWED_ENV.include? k }
       # Set some defaults
       self.env['SHELL'] = '/bin/bash'
+      # Since this is likely to be running within a `bundle exec` context, we
+      # expect any original GEM_PATH has been unset, and the ENV is configured
+      # such that we only use what is within this bundle, which probably
+      # doesn't include bundler itself, although we'll actually need to
+      # 'bundle install' in working directories. To keep things sane, just
+      # carry over the _ORIGINAL_GEM_PATH so that bundler is available
+      if !ENV['_ORIGINAL_GEM_PATH'].nil? &&
+         ENV['_ORIGINAL_GEM_PATH'].strip.length > 0 &&
+         (env['GEM_PATH'].nil? || env['GEM_PATH'].strip.length == 0)
+        self.env['GEM_PATH'] = ENV['_ORIGINAL_GEM_PATH']
+      end
       # Update environment variables from option
       self.env.update env
       # did we get a logger to use?
