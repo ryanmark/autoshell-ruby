@@ -109,7 +109,7 @@ module Autoshell
     # @param path [String] destination path to move to
     def move_to(path)
       mv '.', path
-      self.home_dir = self.working_dir = expand path
+      self.working_dir = expand path
       self
     end
 

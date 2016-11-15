@@ -52,7 +52,25 @@ class TestFilestuff < Minitest::Test
   end
 
   def test_move_to
-    skip
+    r = autoshell :repo
+    d = autoshell :destination
+
+    r.clone REPO_URL
+    r.setup_environment
+
+    # move the files to a new location
+    r.move_to d.working_dir
+
+    # now should have stuff
+    assert r.ruby?, 'Should have ruby'
+    refute r.python?, "Shouldn't have python"
+    refute r.node?, "Shouldn't have node"
+    assert r.git?, 'Should have git'
+    assert r.exist?, 'Should exist'
+    assert r.dir?, 'Should be a dir'
+    assert r.environment?, 'Should have environment'
+
+    assert r.exist?('autotune-build'), 'Should have build script'
   end
 
   def test_copy_to
@@ -79,7 +97,7 @@ class TestFilestuff < Minitest::Test
     assert d.dir?, 'Should be a dir'
     assert d.environment?, 'Should have environment'
 
-    assert r.exist?('autotune-build'), 'Should have build script'
+    assert d.exist?('autotune-build'), 'Should have build script'
 
     # make sure we can't copy a snapshot twice
     assert_raises Autoshell::CommandError do
