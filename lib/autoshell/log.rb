@@ -14,7 +14,7 @@ module Autoshell
     #
     # @return [Logger] logger instance
     def logger
-      return @logger if @logger
+      return @logger if defined? @logger
 
       @log_device = StringIO.new
       @logger = Logger.new(@log_device)
@@ -27,7 +27,7 @@ module Autoshell
     # Get the complete output of the log
     # @return [String] log contents
     def log_output(color: false)
-      return unless @log_device
+      return unless defined? @log_device
       if color
         @log_device.string
       else
@@ -38,7 +38,7 @@ module Autoshell
     # Reset the log contents
     # @return self
     def log_reset
-      @log_device.truncate(0) if @log_device
+      @log_device.truncate(0) if defined? @log_device
       self
     end
   end
