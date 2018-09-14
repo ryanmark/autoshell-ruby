@@ -18,7 +18,7 @@ Gem::Specification.new do |spec|
     .split("\x0").reject { |f| f.match(%r{^(test|spec|features)/}) }
   spec.require_paths = ['lib']
 
-  spec.add_runtime_dependency 'mime-types', '~> 2.6'
+  spec.add_runtime_dependency 'mime-types', '>= 2.6'
   spec.add_runtime_dependency 'ansi', '~> 1.5'
 
   spec.add_development_dependency 'bundler', '~> 1.10'
