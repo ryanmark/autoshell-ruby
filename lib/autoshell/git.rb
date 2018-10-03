@@ -41,9 +41,9 @@ module Autoshell
       [
         git('checkout', '.'),
         git('clean', '-ffd'),
+        git('fetch', 'origin'),
         git('checkout', branch),
         git('pull', '--recurse-submodules=yes'),
-        git('fetch', 'origin'),
         git('checkout', commit_hash_for_checkout),
         git('submodule', 'update', '--init'),
         git('clean', '-ffd')
